@@ -39,12 +39,18 @@ namespace BookShopApi
             //end configure for dbcontext and db connection
 
             //add configure for identity and db connection
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            //services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
             //end configure for identity and db connection
 
 
             services.AddControllers();
-            services.AddSwaggerGen(x => {
+            services.AddSwaggerGen(x =>
+            {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = ".NetLab Api", Version = "v1" });
             });
         }
@@ -61,14 +67,13 @@ namespace BookShopApi
             var swaggerOptions = new Options.SwaggerOptions();
             Configuration.GetSection(nameof(Options.SwaggerOptions)).Bind(swaggerOptions);
             app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
-            app.UseSwaggerUI(options => { options.SwaggerEndpoint(swaggerOptions.UIEndPoint,swaggerOptions.Description); });
+            app.UseSwaggerUI(options => { options.SwaggerEndpoint(swaggerOptions.UIEndPoint, swaggerOptions.Description); });
             //end of swagger configure
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthorization();
             //Add authorization and authentication
             app.UseAuthentication();
             app.UseAuthorization();
