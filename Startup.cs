@@ -2,11 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookShopApi.Data;
+using BookShopApi.Domain;
 using BookShopApi.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,6 +33,16 @@ namespace BookShopApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //add configure for dbcontext and db connection
+            services.AddDbContext<DataContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //end configure for dbcontext and db connection
+
+            //add configure for identity and db connection
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            //end configure for identity and db connection
+
+
             services.AddControllers();
             services.AddSwaggerGen(x => {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = ".NetLab Api", Version = "v1" });
@@ -55,7 +69,10 @@ namespace BookShopApi
             app.UseRouting();
 
             app.UseAuthorization();
-
+            //Add authorization and authentication
+            app.UseAuthentication();
+            app.UseAuthorization();
+            //Add authorization and authentication
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
