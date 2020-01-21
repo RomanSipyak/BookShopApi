@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookShopApi.Data;
 using BookShopApi.Domain;
+using BookShopApi.Installers;
 using BookShopApi.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,26 +34,9 @@ namespace BookShopApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //add configure for dbcontext and db connection
-            services.AddDbContext<DataContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            //end configure for dbcontext and db connection
-
-            //add configure for identity and db connection
-            //services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<DataContext>();
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-            //end configure for identity and db connection
-
-
-            services.AddControllers();
-            services.AddSwaggerGen(x =>
-            {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = ".NetLab Api", Version = "v1" });
-            });
+            services.InstallAllServices(Configuration);
+            //services.AddControllersWithViews();
+            //services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
