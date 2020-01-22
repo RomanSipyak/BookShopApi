@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookShopApi.Installers
 {
-    public interface IInstaller
+    public interface Iinstaller
     {
         void InstallServices(IServiceCollection services, IConfiguration configuration);
     }

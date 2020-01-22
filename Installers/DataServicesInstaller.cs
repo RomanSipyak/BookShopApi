@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookShopApi.Installers
 {
-    public class DataServicesInstaller : IInstaller
+    public class DataServicesInstaller : Iinstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
