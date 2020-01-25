@@ -37,15 +37,41 @@ namespace BookShopApi
             services.InstallAllServices(Configuration);
             //services.AddControllersWithViews();
             //services.AddRazorPages();
+            services.AddCors();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        {   
+                  
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            //app.UseMvc();
+            //for computing statics files
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            //for computing statics files
+            //app.UseSpaStaticFiles();
+            //app.UseSpa(spa =>
+            //{
+            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            //    // see https://go.microsoft.com/fwlink/?linkid=864501
+
+            //    spa.Options.SourcePath = "ClientApp";
+
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+            //        //spa.UseAngularCliServer(npmScript: "start");
+            //    }
+            //});
+            //take api access to take requests from 4200
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 
             //swagger configure
             var swaggerOptions = new Options.SwaggerOptions();
