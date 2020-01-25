@@ -48,6 +48,11 @@ namespace BookShopApi.Services.ServicesImplementations
             return await DataContext.Languages.Include(x => x.Books).SingleOrDefaultAsync(x => x.Id == languageId);
         }
 
+        public async Task<Language> GetLanguageByTitleAsync(string languageTitle)
+        {
+            return await DataContext.Languages.Include(x => x.Books).SingleOrDefaultAsync(x => x.Title == languageTitle);
+        }
+
         public async Task<bool> UpdateLanguageAsync(Language languageForUpdate)
         {
             var existLanguage = await DataContext.Languages.AsNoTracking().SingleOrDefaultAsync(x => x.Title == languageForUpdate.Title);
@@ -63,11 +68,6 @@ namespace BookShopApi.Services.ServicesImplementations
         public async Task<List<Language>> GetLanguages()
         {
             return await DataContext.Languages.Include(x => x.Books).ToListAsync();
-        }
-
-        public async Task<Language> GetLanguageByTitleAsync(string languageTitle)
-        {
-            return await DataContext.Languages.Include(x => x.Books).SingleOrDefaultAsync(x => x.Title == languageTitle);
         }
     }
 }

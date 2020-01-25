@@ -57,8 +57,10 @@ namespace BookShopApi.Services.ServicesImplementations
         {
             return await DataContext.Books
                 .Include(x => x.BookAuthors)
+                .ThenInclude( bookauthors => bookauthors.Author)
                 .Include(x => x.BookCategories)
-                .Include(x => x.Units)
+                .ThenInclude(bookcategory => bookcategory.Category)
+                //.Include(x => x.Units)
                 .ToListAsync();
         }
     }

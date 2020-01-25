@@ -64,7 +64,7 @@ namespace BookShopApi.Services.ServicesImplementations
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
-            return await Datacontext.Categories.Include(x => x.BookCategories).ToListAsync();
+            return await Datacontext.Categories.Include(x => x.BookCategories).ThenInclude(x => x.Book ).ToListAsync();
         }
     }
 }
