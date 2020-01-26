@@ -50,7 +50,7 @@ namespace BookShopApi.Services.ServicesImplementations
             return await Datacontext.Categories.Include(x => x.BookCategories).SingleOrDefaultAsync(x => x.Title == title);
         }
 
-        public async Task<bool> UpdateAuthorAsync(Category categotyForUpdate)
+        public async Task<bool> UpdateCategoryAsync(Category categotyForUpdate)
         {
             var existCategories = await Datacontext.Categories.AsNoTracking().SingleOrDefaultAsync(x => x.Title == categotyForUpdate.Title);
             if (existCategories != null)

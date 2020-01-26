@@ -21,6 +21,9 @@ namespace Tweetbook.Contracts
 
             public const string GetAll = Base + "/Categories";
 
+            public const string Update = Base + "/Categories/{CategoryId}";
+
+            public const string Delete = Base + "/Categories/{CategoryId}";
         }
 
         public static class Authors

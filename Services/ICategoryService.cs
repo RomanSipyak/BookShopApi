@@ -12,7 +12,7 @@ namespace BookShopApi.Services
         Task<bool> DeleteCategoryByIdAsync(int categotyId);
         Task<Category> GetCategoryByIdAsync(int categoryId);
         Task<Category> GetCategoryByTitleAsync(string Title);
-        Task<bool> UpdateAuthorAsync(Category categotyForUpdate);
+        Task<bool> UpdateCategoryAsync(Category categotyForUpdate);
         Task<List<Category>> GetCategoriesAsync();
     }
 }

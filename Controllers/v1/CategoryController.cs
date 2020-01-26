@@ -51,5 +51,30 @@ namespace BookShopApi.Controllers.v1
 
             return Ok(category);
         }
+
+        [HttpPut(ApiRoutes.Categories.Update)]
+        public async Task<IActionResult> UpdateAsync([FromRoute]int categoryId, [FromBody] UpdateCategoryRequest request)
+        {
+            var category = await CategoryService.GetCategoryByIdAsync(categoryId);
+            category.Title = request.Title;
+            var updated = await CategoryService.UpdateCategoryAsync(category);
+            if (!updated)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
+        }
+
+        [HttpDelete(ApiRoutes.Categories.Delete)]
+        public async Task<IActionResult> DeleteAsync([FromRoute]int categoryId)
+        {
+            var post = await CategoryService.DeleteCategoryByIdAsync(categoryId);
+            if (!post)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
     }
 }
