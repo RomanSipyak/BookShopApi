@@ -15,6 +15,10 @@ namespace BookShopApi.Data
 
         public DbSet<Book> Books { get; set; }
 
+        public DbSet<BookAuthor> BookAuthor { get; set; }
+
+        public DbSet<BookCategory> BookCategory { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Language> Languages { get; set; }

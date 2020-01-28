@@ -69,12 +69,12 @@ namespace BookShopApi.Controllers.v1
         [HttpDelete(ApiRoutes.Categories.Delete)]
         public async Task<IActionResult> DeleteAsync([FromRoute]int categoryId)
         {
-            var post = await CategoryService.DeleteCategoryByIdAsync(categoryId);
-            if (!post)
+            var categoryDeleted = await CategoryService.DeleteCategoryByIdAsync(categoryId);
+            if (!categoryDeleted)
             {
                 return NotFound();
             }
-            return NoContent();
+            return Ok(categoryDeleted);
         }
     }
 }

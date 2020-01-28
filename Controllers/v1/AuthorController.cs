@@ -71,12 +71,12 @@ namespace BookShopApi.Controllers.v1
         [HttpDelete(ApiRoutes.Authors.Delete)]
         public async Task<IActionResult> DeleteAsync([FromRoute]int authorId)
         {
-            var post = await AuthorService.DeleteAuthorByIdAsync(authorId);
-            if (!post)
+            var deletedAuthor = await AuthorService.DeleteAuthorByIdAsync(authorId);
+            if (!deletedAuthor)
             {
                 return NotFound();
             }
-            return NoContent();
+            return Ok(deletedAuthor);
         }
     }
 }

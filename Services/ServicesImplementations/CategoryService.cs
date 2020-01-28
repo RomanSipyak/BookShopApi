@@ -45,6 +45,11 @@ namespace BookShopApi.Services.ServicesImplementations
             return await Datacontext.Categories.Include(x => x.BookCategories).SingleOrDefaultAsync(x => x.Id == categoryId);
         }
 
+        public Category GetCategoryById(int categoryId)
+        {
+            return Datacontext.Categories.Include(x => x.BookCategories).SingleOrDefault(x => x.Id == categoryId);
+        }
+
         public async Task<Category> GetCategoryByTitleAsync(string title)
         {
             return await Datacontext.Categories.Include(x => x.BookCategories).SingleOrDefaultAsync(x => x.Title == title);
@@ -64,7 +69,7 @@ namespace BookShopApi.Services.ServicesImplementations
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
-            return await Datacontext.Categories.Include(x => x.BookCategories).ThenInclude(x => x.Book ).ToListAsync();
+            return await Datacontext.Categories.Include(x => x.BookCategories).ThenInclude(x => x.Book).ToListAsync();
         }
     }
 }

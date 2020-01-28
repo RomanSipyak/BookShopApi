@@ -65,7 +65,7 @@ namespace BookShopApi.Services.ServicesImplementations
             return updated > 0;
         }
 
-        public async Task<List<Language>> GetLanguages()
+        public async Task<List<Language>> GetLanguagesAsync()
         {
             return await DataContext.Languages.Include(x => x.Books).ToListAsync();
         }
