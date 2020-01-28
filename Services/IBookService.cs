@@ -11,7 +11,7 @@ namespace BookShopApi.Services
         Task<bool> CreateBookAsync(Book book);
         Task<bool> DeleteBookByIdAsync(int BookId);
         Task<Book> GetBookByIdAsync(int BookId);
-        Task<bool> UpdateBookAsync(Book bookForUpdate); 
+        Task<bool> UpdateBookAsync(Book bookForUpdate);
         Task<List<Book>> GetBooksAsync();
     }
 }

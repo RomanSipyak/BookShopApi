@@ -26,6 +26,19 @@ namespace Tweetbook.Contracts
             public const string Delete = Base + "/Categories/{CategoryId}";
         }
 
+        public static class Languages
+        {
+            public const string Create = Base + "/Languages";
+
+            public const string Get = Base + "/Languages/{languageTitle}";
+
+            public const string GetAll = Base + "/Languages";
+
+            public const string Update = Base + "/Languages/{LanguagesId}";
+
+            public const string Delete = Base + "/Languages/{LanguagesId}";
+        }
+
         public static class Authors
         {
             public const string Create = Base + "/Authors";
@@ -39,11 +52,13 @@ namespace Tweetbook.Contracts
             public const string Delete = Base + "/Authors/{AuthorId}";
         }
 
-        public static class Book
+        public static class Books
         {
             public const string Create = Base + "/Books";
 
             public const string Get = Base + "/Books/{BookId}";
+
+            public const string GetAll = Base + "/Books";
         }
     }
 }

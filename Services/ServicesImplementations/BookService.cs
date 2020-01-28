@@ -55,13 +55,18 @@ namespace BookShopApi.Services.ServicesImplementations
 
         public async Task<List<Book>> GetBooksAsync()
         {
-            return await DataContext.Books
-                .Include(x => x.BookAuthors)
-                .ThenInclude( bookauthors => bookauthors.Author)
-                .Include(x => x.BookCategories)
-                .ThenInclude(bookcategory => bookcategory.Category)
-                //.Include(x => x.Units)
-                .ToListAsync();
+            var books = await DataContext.Books.ToListAsync();
+            DataContext.Authors.Load();
+            DataContext.Categories.Load();
+            DataContext.Languages.Load();
+            DataContext.BookAuthor.Load();
+            DataContext.BookCategory.Load();
+            return books;
+            //.Include(x => x.BookAuthors)
+            //.ThenInclude( bookauthors => bookauthors.Author)
+            //.Include(x => x.BookCategories)
+            //.ThenInclude(bookcategory => bookcategory.Category)
+            //.Include(x => x.Units)
         }
     }
 }

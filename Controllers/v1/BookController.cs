@@ -14,29 +14,51 @@ namespace BookShopApi.Controllers.v1
     {
         private readonly IBookService BookService;
         private readonly ILanguageService LanguageService;
+        private readonly ICategoryService CategoryService;
+        private readonly IAuthorService AuthorService;
 
-
-        public BookController(IBookService bookService,ILanguageService languageService)
+        public BookController(IBookService bookService, ILanguageService languageService, IAuthorService authorService, ICategoryService categoryService)
         {
             BookService = bookService;
             LanguageService = languageService;
+            AuthorService = authorService;
+            CategoryService = categoryService;
         }
 
-        [HttpPost(ApiRoutes.Book.Create)]
+        [HttpPost(ApiRoutes.Books.Create)]
         public async Task<IActionResult> CreateBookAsync([FromBody] CreateBookRequest createBookRequest)
         {
             var book = new Book();
+            book.Title = createBookRequest.Title;
             book.Description = createBookRequest.Description;
-            book.Language = await LanguageService.GetLanguageByTitleAsync(createBookRequest.Language);
-            book.BookAuthors = createBookRequest.BookAuthors.Select(x => new BookAuthor { AuthorId = x, BookId = book.Id }).ToList();
-            book.BookCategories = createBookRequest.BookCategories.Select(x => new BookCategory { CategoryId = x, BookId = book.Id }).ToList();
+            book.Language = await LanguageService.GetLanguageByTitleAsync(createBookRequest.Language.Title);
+            book.BookAuthors =  createBookRequest.BookAuthors.Select(x => new BookAuthor { Author = AuthorService.GetAuthorById(x.Id), Book = book }).ToList();
+            book.BookCategories = createBookRequest.BookCategories.Select(x => new BookCategory { Category = CategoryService.GetCategoryById(x.Id), Book = book }).ToList();
 
             await BookService.CreateBookAsync(book);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var locationUrl = baseUrl + "/" + ApiRoutes.Book.Get.Replace("{BookId}", book.Id.ToString());
+            var locationUrl = baseUrl + "/" + ApiRoutes.Books.Get.Replace("{BookId}", book.Id.ToString());
 
             return Created(locationUrl, book);
+        }
+
+        [HttpGet(ApiRoutes.Books.GetAll)]
+        public async Task<IActionResult> GetAllBooksAsync()
+        {
+            return Ok(await BookService.GetBooksAsync());
+        }
+
+        [HttpGet(ApiRoutes.Books.Get)]
+        public async Task<IActionResult> GetBookById([FromRoute] int BookId)
+        {
+            var bookDeleted = await BookService.GetBookByIdAsync(BookId);
+            if (bookDeleted == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(bookDeleted);
         }
     }
 }
