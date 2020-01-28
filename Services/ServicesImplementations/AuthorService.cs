@@ -50,6 +50,13 @@ namespace BookShopApi.Services.ServicesImplementations
                 .SingleOrDefaultAsync(x => x.Id == authorId);
         }
 
+        public Author GetAuthorById(int authorId)
+        {
+            return DataContext.Authors
+                .Include(x => x.BookAuthors)
+                .SingleOrDefault(x => x.Id == authorId);
+        }
+
         public async Task<bool> UpdateAuthorAsync(Author authorForUpdate)
         {
             DataContext.Authors.Update(authorForUpdate);

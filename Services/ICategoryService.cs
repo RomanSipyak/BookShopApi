@@ -11,6 +11,7 @@ namespace BookShopApi.Services
         Task<bool> CreateCategoryAsync(Category category);
         Task<bool> DeleteCategoryByIdAsync(int categotyId);
         Task<Category> GetCategoryByIdAsync(int categoryId);
+        Category GetCategoryById(int categoryId);
         Task<Category> GetCategoryByTitleAsync(string Title);
         Task<bool> UpdateCategoryAsync(Category categotyForUpdate);
         Task<List<Category>> GetCategoriesAsync();
