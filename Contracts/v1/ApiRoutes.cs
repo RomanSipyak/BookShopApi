@@ -59,6 +59,10 @@ namespace Tweetbook.Contracts
             public const string Get = Base + "/Books/{BookId}";
 
             public const string GetAll = Base + "/Books";
+
+            public const string Update = Base + "/Books/{BookId}";
+
+            public const string Delete = Base + "/Books/{BookId}";
         }
     }
 }

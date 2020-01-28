@@ -60,5 +60,37 @@ namespace BookShopApi.Controllers.v1
 
             return Ok(bookDeleted);
         }
+
+
+        [HttpPut(ApiRoutes.Books.Update)]
+        public async Task<IActionResult> UpdateAsync([FromRoute]int bookId, [FromBody] UpdateBookRequest updateBookRequest)
+        {
+            var book = await BookService.GetBookByIdAsync(bookId);
+
+            book.Title = updateBookRequest.Title;
+            book.Description = updateBookRequest.Description;
+            book.Language = await LanguageService.GetLanguageByTitleAsync(updateBookRequest.Language.Title);
+            book.BookAuthors = updateBookRequest.BookAuthors.Select(x => new BookAuthor { Author = AuthorService.GetAuthorById(x.Id), Book = book }).ToList();
+            book.BookCategories = updateBookRequest.BookCategories.Select(x => new BookCategory { Category = CategoryService.GetCategoryById(x.Id), Book = book }).ToList();
+           
+            var updated = await BookService.UpdateBookAsync(book);
+            if (!updated)
+            {
+                return NotFound();
+            }
+
+            return Ok(book);
+        }
+
+        [HttpDelete(ApiRoutes.Books.Delete)]
+        public async Task<IActionResult> DeleteAsync([FromRoute]int bookid)
+        {
+            var bookDeleted = await BookService.DeleteBookByIdAsync(bookid);
+            if (!bookDeleted)
+            {
+                return NotFound();
+            }
+            return Ok(bookDeleted);
+        }
     }
 }
