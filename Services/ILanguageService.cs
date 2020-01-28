@@ -13,6 +13,6 @@ namespace BookShopApi.Services
         Task<Language> GetLanguageByIdAsync(int languageId);
         Task<Language> GetLanguageByTitleAsync(string languageTitle);
         Task<bool> UpdateLanguageAsync(Language LanguageForUpdate);
-        Task<List<Language>> GetLanguages();
+        Task<List<Language>> GetLanguagesAsync();
     }
 }
