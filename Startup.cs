@@ -69,7 +69,7 @@ namespace BookShopApi
             //    }
             //});
             //take api access to take requests from 4200
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
+            app.UseCors(builder => builder.WithOrigins(Configuration["ClientSettings:clientPort"].ToString())
             .AllowAnyHeader()
             .AllowAnyMethod());
 

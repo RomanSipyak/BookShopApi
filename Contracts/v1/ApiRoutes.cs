@@ -64,5 +64,11 @@ namespace Tweetbook.Contracts
 
             public const string Delete = Base + "/Books/{BookId}";
         }
+
+        public static class Identity
+        {
+            public const string Login = Base + "/Identity/Login";
+            public const string Register = Base + "/Identity/Register";
+        }
     }
 }

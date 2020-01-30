@@ -9,6 +9,10 @@
     <Compile Remove="Migrations\20200121101028_IdentityAdd.Designer.cs" />
     <Compile Remove="Migrations\20200121120650_InitIdentity.cs" />
     <Compile Remove="Migrations\20200121120650_InitIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200127171025_add middle tables.cs" />
+    <Compile Remove="Migrations\20200127171025_add middle tables.Designer.cs" />
+    <Compile Remove="Migrations\20200130010128_Add Admin Role.cs" />
+    <Compile Remove="Migrations\20200130010128_Add Admin Role.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,10 +37,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Contracts\v1\Responses\" />
   </ItemGroup>
 
 

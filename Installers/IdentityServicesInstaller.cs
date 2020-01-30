@@ -1,5 +1,6 @@
 ﻿using BookShopApi.Data;
 using BookShopApi.Options;
+using BookShopApi.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,27 +18,31 @@ namespace BookShopApi.Installers
     public class IdentityServicesInstaller : Iinstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
-        {   //configure JWT
+        {   //start configure JWT
+            //we can get our  "JwtSettings": { "SecretKey": "some key" }
+            //like configuration["JwtSettings:SecretKey"].ToString();
             var jwtSettings = new JwtSettings();
-            configuration.Bind(nameof(JwtSettings), jwtSettings);
+            configuration.Bind(nameof(JwtSettings), jwtSettings);//that part code binding our jwt setting object that have one property (secretKey) with our settings.json that have the same jsonObject with jwt secutity key(mapping them) 
             services.AddSingleton(jwtSettings);
             // configure jwt authentication
+            services.AddScoped<IIdentityService, IdentityService>();    
+
             var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
+            }).AddJwtBearer(x => //setting for how we work with token
             {
                 x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+                x.SaveToken = true; //don`t save token in db
+                x.TokenValidationParameters = new TokenValidationParameters //It is how we need validate our token that we take from our client
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuerSigningKey = true, //for validating our token with secret key
+                    IssuerSigningKey = new SymmetricSecurityKey(key),// that provide encription of signature part by sekret key
                     ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateAudience = false,//it is like who generate this token and we compare it when we get that(read in documentation)
                     RequireExpirationTime = false,
                     ValidateLifetime = true
                 };

@@ -1,6 +1,8 @@
 ﻿using BookShopApi.Contracts.v1.Requests;
 using BookShopApi.Domain.Models;
 using BookShopApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using Tweetbook.Contracts;
 
 namespace BookShopApi.Controllers.v1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BookController : Controller
     {
         private readonly IBookService BookService;
@@ -24,7 +27,7 @@ namespace BookShopApi.Controllers.v1
             AuthorService = authorService;
             CategoryService = categoryService;
         }
-
+        
         [HttpPost(ApiRoutes.Books.Create)]
         public async Task<IActionResult> CreateBookAsync([FromBody] CreateBookRequest createBookRequest)
         {
@@ -42,7 +45,7 @@ namespace BookShopApi.Controllers.v1
 
             return Created(locationUrl, book);
         }
-
+       
         [HttpGet(ApiRoutes.Books.GetAll)]
         public async Task<IActionResult> GetAllBooksAsync()
         {
