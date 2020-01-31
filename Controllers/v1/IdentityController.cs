@@ -69,5 +69,12 @@ namespace BookShopApi.Controllers.v1
            var userDetails =  await _identityService.GetUserProfileAsync(userId);
             return Ok(userDetails);
         }
+
+        [HttpGet(ApiRoutes.Identity.GetAllUsers)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        public async Task<Object> GetAllUsers()
+        {
+            return Ok( await _identityService.GetAllUsers());
+        }
     }
 }

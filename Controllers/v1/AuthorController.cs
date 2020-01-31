@@ -1,6 +1,8 @@
 ﻿using BookShopApi.Contracts.v1.Requests;
 using BookShopApi.Domain.Models;
 using BookShopApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpPost(ApiRoutes.Authors.Create)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateAuthorRequest createAuthorRequest)
         {
             var author = new Author
@@ -54,6 +57,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpPut(ApiRoutes.Authors.Update)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync([FromRoute]int authorId, [FromBody] UpdateAuthorRequest request)
         {
             var author = await AuthorService.GetAuthorByIdAsync(authorId);
@@ -69,6 +73,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpDelete(ApiRoutes.Authors.Delete)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync([FromRoute]int authorId)
         {
             var deletedAuthor = await AuthorService.DeleteAuthorByIdAsync(authorId);

@@ -1,6 +1,8 @@
 ﻿using BookShopApi.Contracts.v1.Requests;
 using BookShopApi.Domain.Models;
 using BookShopApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpPost(ApiRoutes.Categories.Create)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryRequest categoryRequest)//намагаємося замапити до категорії
         {
             var category = new Category
@@ -53,6 +56,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpPut(ApiRoutes.Categories.Update)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync([FromRoute]int categoryId, [FromBody] UpdateCategoryRequest request)
         {
             var category = await CategoryService.GetCategoryByIdAsync(categoryId);
@@ -67,6 +71,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpDelete(ApiRoutes.Categories.Delete)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync([FromRoute]int categoryId)
         {
             var categoryDeleted = await CategoryService.DeleteCategoryByIdAsync(categoryId);

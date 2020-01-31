@@ -72,6 +72,8 @@ namespace Tweetbook.Contracts
             public const string Register = Base + "/Identity/Register";
 
             public const string GetProfile = Base + "/Identity/UserProfile";
+
+            public const string GetAllUsers = Base + "/Identity/Users";
         }
     }
 }

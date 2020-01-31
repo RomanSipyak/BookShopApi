@@ -12,7 +12,6 @@ using Tweetbook.Contracts;
 
 namespace BookShopApi.Controllers.v1
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BookController : Controller
     {
         private readonly IBookService BookService;
@@ -29,6 +28,7 @@ namespace BookShopApi.Controllers.v1
         }
         
         [HttpPost(ApiRoutes.Books.Create)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> CreateBookAsync([FromBody] CreateBookRequest createBookRequest)
         {
             var book = new Book();
@@ -46,9 +46,9 @@ namespace BookShopApi.Controllers.v1
             return Created(locationUrl, book);
         }
        
-        [HttpGet(ApiRoutes.Books.GetAll)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet(ApiRoutes.Books.GetAll)]   
         public async Task<IActionResult> GetAllBooksAsync()
+        
         {
             return Ok(await BookService.GetBooksAsync());
         }
@@ -67,6 +67,7 @@ namespace BookShopApi.Controllers.v1
 
 
         [HttpPut(ApiRoutes.Books.Update)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync([FromRoute]int bookId, [FromBody] UpdateBookRequest updateBookRequest)
         {
             var book = await BookService.GetBookByIdAsync(bookId);
@@ -87,6 +88,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpDelete(ApiRoutes.Books.Delete)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync([FromRoute]int bookid)
         {
             var bookDeleted = await BookService.DeleteBookByIdAsync(bookid);

@@ -1,6 +1,8 @@
 ﻿using BookShopApi.Contracts.v1.Requests;
 using BookShopApi.Domain.Models;
 using BookShopApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpPost(ApiRoutes.Languages.Create)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateLaguageRequest languageRequest)//намагаємося замапити до категорії
         {
             var language = new Language
@@ -53,6 +56,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpPut(ApiRoutes.Languages.Update)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync([FromRoute]int languageId, [FromBody] UpdateLanguageRequest request)
         {
             var language = await LanguageService.GetLanguageByIdAsync(languageId);
@@ -67,6 +71,7 @@ namespace BookShopApi.Controllers.v1
         }
 
         [HttpDelete(ApiRoutes.Languages.Delete)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync([FromRoute]int languageId)
         {
             var languageDeleted = await LanguageService.DeleteLanguageByIdAsync(languageId);

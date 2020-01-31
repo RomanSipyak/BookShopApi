@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using BookShopApi.Domain;
 using BookShopApi.Options;
 using BookShopApi.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookShopApi.Services
 {
@@ -37,6 +38,22 @@ namespace BookShopApi.Services
                 userRoles
             };
         }
+
+        public async Task<object> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var responseUsers = new List<Object>();
+
+            users.ForEach(async x => responseUsers.Add(new
+            {
+                x.Email,
+                userRoles = await _userManager.GetRolesAsync(x)
+            }
+                ));
+            return responseUsers;
+        }
+
+
 
         public async Task<AuthentificanionResult> LoginAsync(string email, string password)
         {
