@@ -47,6 +47,7 @@ namespace BookShopApi.Controllers.v1
         }
        
         [HttpGet(ApiRoutes.Books.GetAll)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAllBooksAsync()
         {
             return Ok(await BookService.GetBooksAsync());

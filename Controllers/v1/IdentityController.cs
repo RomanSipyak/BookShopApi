@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Tweetbook.Contracts;
 using BookShopApi.Contracts.v1.Requests;
@@ -56,6 +58,16 @@ namespace BookShopApi.Controllers.v1
             {
                 Token = authResponse.Token
             });
+        }
+
+        
+        [HttpGet(ApiRoutes.Identity.GetProfile)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<Object> GetUserProfile()
+        {
+            string userId = User.Claims.First(c => c.Type == "id").Value;
+           var userDetails =  await _identityService.GetUserProfileAsync(userId);
+            return Ok(userDetails);
         }
     }
 }

@@ -27,6 +27,17 @@ namespace BookShopApi.Services
             _roleManager = roleManager;
         }
 
+        public async Task<object> GetUserProfileAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            return new
+            {
+                user.Email,
+                userRoles
+            };
+        }
+
         public async Task<AuthentificanionResult> LoginAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);

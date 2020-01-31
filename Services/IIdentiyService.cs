@@ -12,5 +12,7 @@ namespace BookShopApi.Services
         Task<AuthentificanionResult> RegisterAsync(string email, string password);
 
         Task<AuthentificanionResult> LoginAsync(string email, string password);
+        
+        Task<Object> GetUserProfileAsync(string userId);
     }
 }
