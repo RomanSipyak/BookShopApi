@@ -1,6 +1,7 @@
 ﻿using BookShopApi.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace BookShopApi.Contracts.v1.Requests
         public string Title { get; set; }
 
         public string Description { get; set; }
+
+        public decimal Price { get; set; }
 
         public Language Language { get; set; }
 

@@ -12,6 +12,8 @@ namespace BookShopApi.Contracts.v1.Requests
 
         public string Description { get; set; }
 
+        public decimal Price { get; set; }
+
         public Language Language { get; set; }
 
         public List<Category> BookCategories { get; set; }

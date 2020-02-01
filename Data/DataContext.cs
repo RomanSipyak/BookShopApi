@@ -61,6 +61,9 @@ namespace BookShopApi.Data
                 .HasOne(bc => bc.Author)
                 .WithMany(c => c.BookAuthors)
                 .HasForeignKey(bc => bc.AuthorId);
+
+            modelBuilder.Entity<Book>()
+            .Property(b => b.Price).HasColumnType("decimal(6, 2)");
         }   
     }
 }

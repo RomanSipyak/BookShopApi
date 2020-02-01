@@ -26,7 +26,7 @@ namespace BookShopApi.Controllers.v1
             AuthorService = authorService;
             CategoryService = categoryService;
         }
-        
+
         [HttpPost(ApiRoutes.Books.Create)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> CreateBookAsync([FromBody] CreateBookRequest createBookRequest)
@@ -34,8 +34,9 @@ namespace BookShopApi.Controllers.v1
             var book = new Book();
             book.Title = createBookRequest.Title;
             book.Description = createBookRequest.Description;
+            book.Price = Convert.ToDecimal(createBookRequest.Price, new System.Globalization.CultureInfo("en-US"));
             book.Language = await LanguageService.GetLanguageByTitleAsync(createBookRequest.Language.Title);
-            book.BookAuthors =  createBookRequest.BookAuthors.Select(x => new BookAuthor { Author = AuthorService.GetAuthorById(x.Id), Book = book }).ToList();
+            book.BookAuthors = createBookRequest.BookAuthors.Select(x => new BookAuthor { Author = AuthorService.GetAuthorById(x.Id), Book = book }).ToList();
             book.BookCategories = createBookRequest.BookCategories.Select(x => new BookCategory { Category = CategoryService.GetCategoryById(x.Id), Book = book }).ToList();
 
             await BookService.CreateBookAsync(book);
@@ -45,10 +46,9 @@ namespace BookShopApi.Controllers.v1
 
             return Created(locationUrl, book);
         }
-       
-        [HttpGet(ApiRoutes.Books.GetAll)]   
+
+        [HttpGet(ApiRoutes.Books.GetAll)]
         public async Task<IActionResult> GetAllBooksAsync()
-        
         {
             return Ok(await BookService.GetBooksAsync());
         }
@@ -74,10 +74,11 @@ namespace BookShopApi.Controllers.v1
 
             book.Title = updateBookRequest.Title;
             book.Description = updateBookRequest.Description;
+            book.Price = Convert.ToDecimal(updateBookRequest.Price, new System.Globalization.CultureInfo("en-US"));
             book.Language = await LanguageService.GetLanguageByTitleAsync(updateBookRequest.Language.Title);
             book.BookAuthors = updateBookRequest.BookAuthors.Select(x => new BookAuthor { Author = AuthorService.GetAuthorById(x.Id), Book = book }).ToList();
             book.BookCategories = updateBookRequest.BookCategories.Select(x => new BookCategory { Category = CategoryService.GetCategoryById(x.Id), Book = book }).ToList();
-           
+
             var updated = await BookService.UpdateBookAsync(book);
             if (!updated)
             {

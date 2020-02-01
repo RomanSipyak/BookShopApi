@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@ namespace BookShopApi.Domain.Models
         public string Title { get; set; }
 
         public string Description { get; set; }
+        //[Column(TypeName = "decimal(6,2)")]
+        public decimal Price { get; set; }
 
         public int LanguageId { get; set; }
 

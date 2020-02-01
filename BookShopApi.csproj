@@ -13,6 +13,14 @@
     <Compile Remove="Migrations\20200127171025_add middle tables.Designer.cs" />
     <Compile Remove="Migrations\20200130010128_Add Admin Role.cs" />
     <Compile Remove="Migrations\20200130010128_Add Admin Role.Designer.cs" />
+    <Compile Remove="Migrations\20200131183557_AddPriceToBook.cs" />
+    <Compile Remove="Migrations\20200131183557_AddPriceToBook.Designer.cs" />
+    <Compile Remove="Migrations\20200131192520_AddPriceToBook.cs" />
+    <Compile Remove="Migrations\20200131192520_AddPriceToBook.Designer.cs" />
+    <Compile Remove="Migrations\20200131201728_ChangePrice.cs" />
+    <Compile Remove="Migrations\20200131201728_ChangePrice.Designer.cs" />
+    <Compile Remove="Migrations\20200201165633_AddPriceToBook.cs" />
+    <Compile Remove="Migrations\20200201165633_AddPriceToBook.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
