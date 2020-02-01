@@ -39,17 +39,35 @@ namespace BookShopApi.Services
             };
         }
 
+        public async Task<bool> DeleteUserByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return false;
+            }
+            var deleted = await _userManager.DeleteAsync(user);
+            if (deleted.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // find bug with async
         public async Task<object> GetAllUsers()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = _userManager.Users.ToList();
             var responseUsers = new List<Object>();
 
-            users.ForEach(async x => responseUsers.Add(new
+             users.ForEach(async x => responseUsers.Add(new
             {
                 x.Email,
                 userRoles = await _userManager.GetRolesAsync(x)
             }
-                ));
+               ));
             return responseUsers;
         }
 

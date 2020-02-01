@@ -74,6 +74,8 @@ namespace Tweetbook.Contracts
             public const string GetProfile = Base + "/Identity/UserProfile";
 
             public const string GetAllUsers = Base + "/Identity/Users";
+
+            public const string DeleteUserByEmail = Base + "/Identity/Users/Delete/{userEmail}";
         }
     }
 }

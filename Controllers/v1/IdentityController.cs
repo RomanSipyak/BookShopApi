@@ -63,7 +63,7 @@ namespace BookShopApi.Controllers.v1
         
         [HttpGet(ApiRoutes.Identity.GetProfile)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<Object> GetUserProfile()
+        public async Task<Object> GetUserProfileAsync()
         {
             string userId = User.Claims.First(c => c.Type == "id").Value;
            var userDetails =  await _identityService.GetUserProfileAsync(userId);
@@ -72,9 +72,21 @@ namespace BookShopApi.Controllers.v1
 
         [HttpGet(ApiRoutes.Identity.GetAllUsers)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-        public async Task<Object> GetAllUsers()
+        public async Task<Object> GetAllUsersAsync()
         {
             return Ok( await _identityService.GetAllUsers());
+        }
+
+        [HttpDelete(ApiRoutes.Identity.DeleteUserByEmail)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        public async Task<IActionResult> DeleteUserByEmailAsync([FromRoute] string userEmail)
+        {
+            var userDeleted = await _identityService.DeleteUserByEmail(userEmail);
+            if (!userDeleted)
+            {
+                return NotFound();
+            }
+            return Ok(userDeleted);
         }
     }
 }

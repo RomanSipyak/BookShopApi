@@ -16,5 +16,7 @@ namespace BookShopApi.Services
         Task<Object> GetUserProfileAsync(string userId);
 
         Task<object> GetAllUsers();
+
+        Task<bool> DeleteUserByEmail(string email);
     }
 }
