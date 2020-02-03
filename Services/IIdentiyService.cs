@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookShopApi.Contracts.v1.Requests;
+using BookShopApi.Contracts.v1.Responses;
 using BookShopApi.Domain;
 using BookShopApi.Domain.Models;
 
@@ -13,10 +15,14 @@ namespace BookShopApi.Services
 
         Task<AuthentificanionResult> LoginAsync(string email, string password);
         
-        Task<Object> GetUserProfileAsync(string userId);
+        Task<object> GetUserProfileAsync(string userId);
 
-        Task<object> GetAllUsers();
+        Task<List<UserResponse>> GetAllUsersAsync();
+
+        Task<bool> UpdateUserAsync(UpdateUserRequest updateUserRequest);
 
         Task<bool> DeleteUserByEmail(string email);
+
+        Task<object> GetAllRolesAsync();
     }
 }

@@ -75,7 +75,13 @@ namespace Tweetbook.Contracts
 
             public const string GetAllUsers = Base + "/Identity/Users";
 
+            public const string GetAllRoles = Base + "/Identity/Roles";
+
+            public const string UpdateUser = Base + "/Identity/UpdateUser";
+
             public const string DeleteUserByEmail = Base + "/Identity/Users/Delete/{userEmail}";
+
+
         }
     }
 }

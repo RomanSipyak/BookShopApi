@@ -72,9 +72,17 @@ namespace BookShopApi.Controllers.v1
 
         [HttpGet(ApiRoutes.Identity.GetAllUsers)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-        public async Task<Object> GetAllUsersAsync()
+        public async Task<IActionResult> GetAllUsersAsync()
+        {   
+            var userResponses = await _identityService.GetAllUsersAsync();
+            return Ok(userResponses);
+        }
+
+        [HttpGet(ApiRoutes.Identity.GetAllRoles)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        public async Task<IActionResult> GetAllRolesAsync()
         {
-            return Ok( await _identityService.GetAllUsers());
+            return  Ok(await _identityService.GetAllRolesAsync());
         }
 
         [HttpDelete(ApiRoutes.Identity.DeleteUserByEmail)]
@@ -87,6 +95,18 @@ namespace BookShopApi.Controllers.v1
                 return NotFound();
             }
             return Ok(userDeleted);
+        }
+
+        [HttpPut(ApiRoutes.Identity.UpdateUser)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        public async Task<IActionResult> UpdateUserRolesAsync([FromBody] UpdateUserRequest user)
+        {
+            var userUpdated = await _identityService.UpdateUserAsync(user);
+            if (!userUpdated)
+            {
+                return NotFound();
+            }
+            return Ok(userUpdated);
         }
     }
 }

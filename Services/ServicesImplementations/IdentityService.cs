@@ -11,6 +11,8 @@ using BookShopApi.Domain;
 using BookShopApi.Options;
 using BookShopApi.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using BookShopApi.Contracts.v1.Responses;
+using BookShopApi.Contracts.v1.Requests;
 
 namespace BookShopApi.Services
 {
@@ -57,18 +59,22 @@ namespace BookShopApi.Services
             }
         }
         // find bug with async
-        public async Task<object> GetAllUsers()
+        public async Task<List<UserResponse>> GetAllUsersAsync()
         {
             var users = _userManager.Users.ToList();
-            var responseUsers = new List<Object>();
+            var usersResponses = new List<UserResponse>();
 
-             users.ForEach(async x => responseUsers.Add(new
+            foreach (var user in users)
             {
-                x.Email,
-                userRoles = await _userManager.GetRolesAsync(x)
+                IList<string> userRoles = await _userManager.GetRolesAsync(user);
+                usersResponses.Add(new UserResponse
+                {
+                    Email = user.Email,
+                    userRoles = userRoles.Select(x => new Role { Title = x}).ToList()
+                });
             }
-               ));
-            return responseUsers;
+
+            return usersResponses;
         }
 
 
@@ -175,6 +181,34 @@ namespace BookShopApi.Services
                 Success = true,
                 Token = tokenHandler.WriteToken(token)
             };
+        }
+
+        public async Task<object> GetAllRolesAsync()
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            return roles.Select(x => new RoleResponse { Title = x.Name }).ToList();
+        }
+
+        public async Task<bool> UpdateUserAsync(UpdateUserRequest updateUserRequest)
+        { 
+                var existUsers = await _userManager.FindByEmailAsync(updateUserRequest.Email);
+                if (existUsers == null)
+                {
+                    return false;
+                }
+
+                // получем список ролей пользователя
+                var userRoles = await _userManager.GetRolesAsync(existUsers);
+                // получаем список ролей, которые были добавлены
+                var addedRoles = updateUserRequest.userRoles.Select(x => x.Title).Except(userRoles);
+                // получаем роли, которые были удалены
+                var removedRoles = userRoles.Except(updateUserRequest.userRoles.Select(x => x.Title));
+
+                await _userManager.AddToRolesAsync(existUsers, addedRoles);
+
+                await _userManager.RemoveFromRolesAsync(existUsers, removedRoles);
+
+                return true;
         }
     }
 }
