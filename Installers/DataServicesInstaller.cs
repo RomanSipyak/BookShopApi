@@ -19,8 +19,6 @@ namespace BookShopApi.Installers
             services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             //end configure for dbcontext and db connection
-
-           
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();

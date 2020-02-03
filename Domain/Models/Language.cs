@@ -15,7 +15,7 @@ namespace BookShopApi.Domain.Models
 
         public Language()
         {
-            Books = new List<Book>();
+            this.Books = new List<Book>();
         }
     }
 }

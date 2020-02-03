@@ -10,7 +10,6 @@ namespace BookShopApi.Data
 {
     public class DataContext : IdentityDbContext
     {
-
         public DbSet<Author> Authors { get; set; }
 
         public DbSet<Book> Books { get; set; }
@@ -31,11 +30,11 @@ namespace BookShopApi.Data
 
         public DbSet<Unit> Units { get; set; }
 
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContext(DbContextOptions<DataContext> options)
+            : base(options)
         {
-
         }
-       
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -64,6 +63,6 @@ namespace BookShopApi.Data
 
             modelBuilder.Entity<Book>()
             .Property(b => b.Price).HasColumnType("decimal(6, 2)");
-        }   
+        }
     }
 }

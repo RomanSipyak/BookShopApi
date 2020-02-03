@@ -16,8 +16,7 @@ namespace BookShopApi.Domain.Models
 
         public StatusOfUnit()
         {
-            Units = new List<Unit>();
-
+            this.Units = new List<Unit>();
         }
     }
 }

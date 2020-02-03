@@ -14,11 +14,11 @@ namespace BookShopApi.Controllers.v1
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryService CategoryService;
+        private readonly ICategoryService categoryService;
 
         public CategoryController(ICategoryService categoryService)
         {
-            CategoryService = categoryService;
+            this.categoryService = categoryService;
         }
 
         [HttpPost(ApiRoutes.Categories.Create)]
@@ -27,59 +27,60 @@ namespace BookShopApi.Controllers.v1
         {
             var category = new Category
             {
-                Title = categoryRequest.Title
+                Title = categoryRequest.Title,
             };
 
-            await CategoryService.CreateCategoryAsync(category);
+            await categoryService.CreateCategoryAsync(category);
             //вертає протокол запиту Вертає локал хост
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            var baseUrl = $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host.ToUriComponent()}";
             var locationUrl = baseUrl + "/" + ApiRoutes.Categories.Get.Replace("{categoryTitle}", category.Title);
-            return Created(locationUrl, category);
+            return this.Created(locationUrl, category);
         }
 
         [HttpGet(ApiRoutes.Categories.GetAll)]
         public async Task<IActionResult> GetAllCategoriesAsync()
         {
-            return Ok(await CategoryService.GetCategoriesAsync());
+            return this.Ok(await this.categoryService.GetCategoriesAsync());
         }
 
         [HttpGet(ApiRoutes.Categories.Get)]
         public async Task<IActionResult> GetCategotyByTitle([FromRoute] string categoryTitle)
         {
-            var category = await CategoryService.GetCategoryByTitleAsync(categoryTitle);
-            if(category == null)
+            var category = await this.categoryService.GetCategoryByTitleAsync(categoryTitle);
+            if (category == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(category);
+            return this.Ok(category);
         }
 
         [HttpPut(ApiRoutes.Categories.Update)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync([FromRoute]int categoryId, [FromBody] UpdateCategoryRequest request)
         {
-            var category = await CategoryService.GetCategoryByIdAsync(categoryId);
+            var category = await this.categoryService.GetCategoryByIdAsync(categoryId);
             category.Title = request.Title;
-            var updated = await CategoryService.UpdateCategoryAsync(category);
+            var updated = await this.categoryService.UpdateCategoryAsync(category);
             if (!updated)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(category);
+            return this.Ok(category);
         }
 
         [HttpDelete(ApiRoutes.Categories.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-        public async Task<IActionResult> DeleteAsync([FromRoute]int categoryId)
+        public async Task<IActionResult> DeleteAsync([FromRoute]int CategoryId)
         {
-            var categoryDeleted = await CategoryService.DeleteCategoryByIdAsync(categoryId);
+            var categoryDeleted = await this.categoryService.DeleteCategoryByIdAsync(CategoryId);
             if (!categoryDeleted)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            return Ok(categoryDeleted);
+
+            return this.Ok(categoryDeleted);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace BookShopApi.Installers
             configuration.Bind(nameof(JwtSettings), jwtSettings);//that part code binding our jwt setting object that have one property (secretKey) with our settings.json that have the same jsonObject with jwt secutity key(mapping them) 
             services.AddSingleton(jwtSettings);
             // configure jwt authentication
-            services.AddScoped<IIdentityService, IdentityService>();    
+            services.AddScoped<IIdentityService, IdentityService>();
 
             var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
             services.AddAuthentication(x =>

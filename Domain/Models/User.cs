@@ -8,6 +8,5 @@ namespace BookShopApi.Domain
 {
     public class User : IdentityUser
     {
-
     }
 }

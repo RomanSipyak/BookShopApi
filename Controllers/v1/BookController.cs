@@ -14,17 +14,17 @@ namespace BookShopApi.Controllers.v1
 {
     public class BookController : Controller
     {
-        private readonly IBookService BookService;
-        private readonly ILanguageService LanguageService;
-        private readonly ICategoryService CategoryService;
-        private readonly IAuthorService AuthorService;
+        private readonly IBookService bookService;
+        private readonly ILanguageService languageService;
+        private readonly ICategoryService categoryService;
+        private readonly IAuthorService authorService;
 
         public BookController(IBookService bookService, ILanguageService languageService, IAuthorService authorService, ICategoryService categoryService)
         {
-            BookService = bookService;
-            LanguageService = languageService;
-            AuthorService = authorService;
-            CategoryService = categoryService;
+            this.bookService = bookService;
+            this.languageService = languageService;
+            this.authorService = authorService;
+            this.categoryService = categoryService;
         }
 
         [HttpPost(ApiRoutes.Books.Create)]
@@ -35,28 +35,28 @@ namespace BookShopApi.Controllers.v1
             book.Title = createBookRequest.Title;
             book.Description = createBookRequest.Description;
             book.Price = Convert.ToDecimal(createBookRequest.Price, new System.Globalization.CultureInfo("en-US"));
-            book.Language = await LanguageService.GetLanguageByTitleAsync(createBookRequest.Language.Title);
-            book.BookAuthors = createBookRequest.BookAuthors.Select(x => new BookAuthor { Author = AuthorService.GetAuthorById(x.Id), Book = book }).ToList();
-            book.BookCategories = createBookRequest.BookCategories.Select(x => new BookCategory { Category = CategoryService.GetCategoryById(x.Id), Book = book }).ToList();
+            book.Language = await this.languageService.GetLanguageByTitleAsync(createBookRequest.Language.Title);
+            book.BookAuthors = createBookRequest.BookAuthors.Select(x => new BookAuthor { Author = this.authorService.GetAuthorById(x.Id), Book = book }).ToList();
+            book.BookCategories = createBookRequest.BookCategories.Select(x => new BookCategory { Category = this.categoryService.GetCategoryById(x.Id), Book = book }).ToList();
 
-            await BookService.CreateBookAsync(book);
+            await this.bookService.CreateBookAsync(book);
 
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            var baseUrl = $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host.ToUriComponent()}";
             var locationUrl = baseUrl + "/" + ApiRoutes.Books.Get.Replace("{BookId}", book.Id.ToString());
 
-            return Created(locationUrl, book);
+            return this.Created(locationUrl, book);
         }
 
         [HttpGet(ApiRoutes.Books.GetAll)]
         public async Task<IActionResult> GetAllBooksAsync()
         {
-            return Ok(await BookService.GetBooksAsync());
+            return this.Ok(await this.bookService.GetBooksAsync());
         }
 
         [HttpGet(ApiRoutes.Books.Get)]
         public async Task<IActionResult> GetBookById([FromRoute] int BookId)
         {
-            var bookDeleted = await BookService.GetBookByIdAsync(BookId);
+            var bookDeleted = await bookService.GetBookByIdAsync(BookId);
             if (bookDeleted == null)
             {
                 return NotFound();
@@ -68,36 +68,37 @@ namespace BookShopApi.Controllers.v1
 
         [HttpPut(ApiRoutes.Books.Update)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-        public async Task<IActionResult> UpdateAsync([FromRoute]int bookId, [FromBody] UpdateBookRequest updateBookRequest)
+        public async Task<IActionResult> UpdateAsync([FromRoute]int BookId, [FromBody] UpdateBookRequest updateBookRequest)
         {
-            var book = await BookService.GetBookByIdAsync(bookId);
+            var book = await this.bookService.GetBookByIdAsync(BookId);
 
             book.Title = updateBookRequest.Title;
             book.Description = updateBookRequest.Description;
             book.Price = Convert.ToDecimal(updateBookRequest.Price, new System.Globalization.CultureInfo("en-US"));
-            book.Language = await LanguageService.GetLanguageByTitleAsync(updateBookRequest.Language.Title);
-            book.BookAuthors = updateBookRequest.BookAuthors.Select(x => new BookAuthor { Author = AuthorService.GetAuthorById(x.Id), Book = book }).ToList();
-            book.BookCategories = updateBookRequest.BookCategories.Select(x => new BookCategory { Category = CategoryService.GetCategoryById(x.Id), Book = book }).ToList();
+            book.Language = await this.languageService.GetLanguageByTitleAsync(updateBookRequest.Language.Title);
+            book.BookAuthors = updateBookRequest.BookAuthors.Select(x => new BookAuthor { Author = this.authorService.GetAuthorById(x.Id), Book = book }).ToList();
+            book.BookCategories = updateBookRequest.BookCategories.Select(x => new BookCategory { Category = this.categoryService.GetCategoryById(x.Id), Book = book }).ToList();
 
-            var updated = await BookService.UpdateBookAsync(book);
+            var updated = await this.bookService.UpdateBookAsync(book);
             if (!updated)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(book);
+            return this.Ok(book);
         }
 
         [HttpDelete(ApiRoutes.Books.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync([FromRoute]int bookid)
         {
-            var bookDeleted = await BookService.DeleteBookByIdAsync(bookid);
+            var bookDeleted = await this.bookService.DeleteBookByIdAsync(bookid);
             if (!bookDeleted)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            return Ok(bookDeleted);
+
+            return this.Ok(bookDeleted);
         }
     }
 }

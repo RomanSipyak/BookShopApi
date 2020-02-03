@@ -14,11 +14,11 @@ namespace BookShopApi.Controllers.v1
 {
     public class AuthorController : Controller
     {
-        private readonly IAuthorService AuthorService;
+        private readonly IAuthorService authorService;
 
         public AuthorController(IAuthorService authorService)
         {
-            AuthorService = authorService;
+            this.authorService = authorService;
         }
 
         [HttpPost(ApiRoutes.Authors.Create)]
@@ -28,60 +28,61 @@ namespace BookShopApi.Controllers.v1
             var author = new Author
             {
                 FullName = createAuthorRequest.FullName,
-                Biography = createAuthorRequest.Biography
+                Biography = createAuthorRequest.Biography,
             };
 
-            await AuthorService.CreateAuthorAsync(author);
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            await this.authorService.CreateAuthorAsync(author);
+            var baseUrl = $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host.ToUriComponent()}";
             var locationUrl = baseUrl + "/" + ApiRoutes.Authors.Get.Replace("{AuthorId}", author.Id.ToString());
-            return Created(locationUrl, author);
+            return this.Created(locationUrl, author);
         }
 
         [HttpGet(ApiRoutes.Authors.GetAll)]
         public async Task<IActionResult> GetAllAuthorsAsync()
         {
-            return Ok(await AuthorService.GetAuthorsAsync());
+            return this.Ok(await this.authorService.GetAuthorsAsync());
         }
 
         [HttpGet(ApiRoutes.Authors.Get)]
         public async Task<IActionResult> GetAuthorById([FromRoute] int AuthorId)
         {
-            var author = await AuthorService.GetAuthorByIdAsync(AuthorId);
+            var author = await this.authorService.GetAuthorByIdAsync(AuthorId);
 
             if (author == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(author);
+            return this.Ok(author);
         }
 
         [HttpPut(ApiRoutes.Authors.Update)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync([FromRoute]int authorId, [FromBody] UpdateAuthorRequest request)
         {
-            var author = await AuthorService.GetAuthorByIdAsync(authorId);
+            var author = await this.authorService.GetAuthorByIdAsync(authorId);
             author.FullName = request.FullName;
             author.Biography = request.Biography;
-            var updated = await AuthorService.UpdateAuthorAsync(author);
+            var updated = await this.authorService.UpdateAuthorAsync(author);
             if (!updated)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(author);
+            return this.Ok(author);
         }
 
         [HttpDelete(ApiRoutes.Authors.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync([FromRoute]int authorId)
         {
-            var deletedAuthor = await AuthorService.DeleteAuthorByIdAsync(authorId);
+            var deletedAuthor = await this.authorService.DeleteAuthorByIdAsync(authorId);
             if (!deletedAuthor)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            return Ok(deletedAuthor);
+
+            return this.Ok(deletedAuthor);
         }
     }
 }

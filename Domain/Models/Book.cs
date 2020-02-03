@@ -28,11 +28,11 @@ namespace BookShopApi.Domain.Models
 
         public Book()
         {
-            BookCategories = new List<BookCategory>();
+            this.BookCategories = new List<BookCategory>();
 
-            BookAuthors = new List<BookAuthor>();
+            this.BookAuthors = new List<BookAuthor>();
 
-            Units = new List<Unit>();
+            this.Units = new List<Unit>();
         }
     }
 }

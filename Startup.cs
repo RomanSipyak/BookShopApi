@@ -38,17 +38,17 @@ namespace BookShopApi
             //services.AddControllersWithViews();
             //services.AddRazorPages();
             services.AddCors();
-           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {   
-                  
+        {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
             //app.UseMvc();
             //for computing statics files
             app.UseDefaultFiles();
@@ -69,7 +69,7 @@ namespace BookShopApi
             //    }
             //});
             //take api access to take requests from 4200
-            app.UseCors(builder => builder.WithOrigins(Configuration["ClientSettings:clientPort"].ToString())
+            app.UseCors(builder => builder.WithOrigins(this.Configuration["ClientSettings:clientPort"].ToString())
             .AllowAnyHeader()
             .AllowAnyMethod());
 

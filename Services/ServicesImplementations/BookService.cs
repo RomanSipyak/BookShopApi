@@ -10,36 +10,37 @@ namespace BookShopApi.Services.ServicesImplementations
 {
     public class BookService : IBookService
     {
-        private readonly DataContext DataContext;
+        private readonly DataContext dataContext;
 
         public BookService(DataContext dataContext)
         {
-            this.DataContext = dataContext;
+            this.dataContext = dataContext;
         }
 
         public async Task<bool> CreateBookAsync(Book book)
         {
-            await DataContext.Books.AddAsync(book);
-            var created = await DataContext.SaveChangesAsync();
+            await this.dataContext.Books.AddAsync(book);
+            var created = await this.dataContext.SaveChangesAsync();
             return created > 0;
         }
 
         public async Task<bool> DeleteBookByIdAsync(int BookId)
         {
-            var book = await GetBookByIdAsync(BookId);
+            var book = await this.GetBookByIdAsync(BookId);
 
             if (book == null)
             {
                 return false;
             }
-            DataContext.Books.Remove(book);
-            var deleted = DataContext.SaveChanges();
+
+            this.dataContext.Books.Remove(book);
+            var deleted = this.dataContext.SaveChanges();
             return deleted > 0;
         }
 
         public async Task<Book> GetBookByIdAsync(int BookId)
         {
-            return await DataContext.Books
+            return await this.dataContext.Books
                 .Include(x => x.BookAuthors)
                 .Include(x => x.BookCategories)
                 .Include(x => x.Units)
@@ -48,19 +49,19 @@ namespace BookShopApi.Services.ServicesImplementations
 
         public async Task<bool> UpdateBookAsync(Book bookForUpdate)
         {
-            DataContext.Books.Update(bookForUpdate);
-            var updated = await DataContext.SaveChangesAsync();
+            this.dataContext.Books.Update(bookForUpdate);
+            var updated = await this.dataContext.SaveChangesAsync();
             return updated > 0;
         }
 
         public async Task<List<Book>> GetBooksAsync()
         {
-            var books = await DataContext.Books.ToListAsync();
-            DataContext.Authors.Load();
-            DataContext.Categories.Load();
-            DataContext.Languages.Load();
-            DataContext.BookAuthor.Load();
-            DataContext.BookCategory.Load();
+            var books = await this.dataContext.Books.ToListAsync();
+            this.dataContext.Authors.Load();
+            this.dataContext.Categories.Load();
+            this.dataContext.Languages.Load();
+            this.dataContext.BookAuthor.Load();
+            this.dataContext.BookCategory.Load();
             return books;
             //.Include(x => x.BookAuthors)
             //.ThenInclude( bookauthors => bookauthors.Author)

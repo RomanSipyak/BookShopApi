@@ -9,10 +9,15 @@ namespace BookShopApi.Services
     public interface IAuthorService
     {
         Task<bool> CreateAuthorAsync(Author author);
+
         Task<bool> DeleteAuthorByIdAsync(int authorId);
+
         Task<Author> GetAuthorByIdAsync(int authorId);
+
         Author GetAuthorById(int authorId);
+
         Task<bool> UpdateAuthorAsync(Author authorForUpdate);
+
         Task<List<Author>> GetAuthorsAsync();
     }
 }

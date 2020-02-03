@@ -8,12 +8,14 @@ namespace BookShopApi.Domain.Models
     public class Category
     {
         public int Id { get; set; }
+
         public string Title { get; set; }
+
         public List<BookCategory> BookCategories { get; set; }
 
         public Category()
         {
-            BookCategories = new List<BookCategory>();
+            this.BookCategories = new List<BookCategory>();
         }
     }
 }

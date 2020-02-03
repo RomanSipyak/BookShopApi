@@ -19,7 +19,7 @@ namespace BookShopApi.Domain.Models
 
         public Order()
         {
-            Units = new List<Unit>();
+            this.Units = new List<Unit>();
         }
     }
 }

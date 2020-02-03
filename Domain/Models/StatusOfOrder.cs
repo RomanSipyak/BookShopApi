@@ -15,7 +15,7 @@ namespace BookShopApi.Domain.Models
 
         public StatusOfOrder()
         {
-            Orders = new List<Order>();
+            this.Orders = new List<Order>();
         }
     }
 }

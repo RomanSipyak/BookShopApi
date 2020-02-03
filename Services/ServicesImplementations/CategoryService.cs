@@ -10,66 +10,70 @@ namespace BookShopApi.Services.ServicesImplementations
 {
     public class CategoryService : ICategoryService
     {
-        private readonly DataContext Datacontext;
+        private readonly DataContext datacontext;
 
         public CategoryService(DataContext dataContext)
         {
-            Datacontext = dataContext;
+            this.datacontext = dataContext;
         }
+
         public async Task<bool> CreateCategoryAsync(Category category)
         {
-            var categocyExist = await Datacontext.Categories.AsNoTracking().SingleOrDefaultAsync(x => x.Id == category.Id || x.Title == category.Title);
+            var categocyExist = await this.datacontext.Categories.AsNoTracking().SingleOrDefaultAsync(x => x.Id == category.Id || x.Title == category.Title);
             if (categocyExist != null)
             {
                 return true;
             }
-            await Datacontext.Categories.AddAsync(category);
-            var created = await Datacontext.SaveChangesAsync();
+
+            await this.datacontext.Categories.AddAsync(category);
+            var created = await this.datacontext.SaveChangesAsync();
             return created > 0;
         }
 
         public async Task<bool> DeleteCategoryByIdAsync(int categotyId)
         {
-            var category = await GetCategoryByIdAsync(categotyId);
+            var category = await this.GetCategoryByIdAsync(categotyId);
             if (category == null)
             {
                 return false;
             }
-            Datacontext.Categories.Remove(category);
-            var deleted = await Datacontext.SaveChangesAsync();
+
+            this.datacontext.Categories.Remove(category);
+            var deleted = await this.datacontext.SaveChangesAsync();
             return deleted > 0;
         }
 
         public async Task<Category> GetCategoryByIdAsync(int categoryId)
         {
-            return await Datacontext.Categories.Include(x => x.BookCategories).SingleOrDefaultAsync(x => x.Id == categoryId);
+            return await this.datacontext.Categories.Include(x => x.BookCategories).SingleOrDefaultAsync(x => x.Id == categoryId);
         }
 
         public Category GetCategoryById(int categoryId)
         {
-            return Datacontext.Categories.Include(x => x.BookCategories).SingleOrDefault(x => x.Id == categoryId);
+            return this.datacontext.Categories.Include(x => x.BookCategories).SingleOrDefault(x => x.Id == categoryId);
         }
 
         public async Task<Category> GetCategoryByTitleAsync(string title)
         {
-            return await Datacontext.Categories.Include(x => x.BookCategories).SingleOrDefaultAsync(x => x.Title == title);
+            return await this.datacontext.Categories.Include(x => x.BookCategories).SingleOrDefaultAsync(x => x.Title == title);
         }
 
         public async Task<bool> UpdateCategoryAsync(Category categotyForUpdate)
         {
-            var existCategories = await Datacontext.Categories.AsNoTracking().SingleOrDefaultAsync(x => x.Title == categotyForUpdate.Title);
+            var existCategories = await this.datacontext.Categories.AsNoTracking().SingleOrDefaultAsync(x => x.Title == categotyForUpdate.Title);
             if (existCategories != null)
             {
                 return false;
             }
-            Datacontext.Categories.Update(categotyForUpdate);
-            var updated = await Datacontext.SaveChangesAsync();
+
+            this.datacontext.Categories.Update(categotyForUpdate);
+            var updated = await this.datacontext.SaveChangesAsync();
             return updated > 0;
         }
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
-            return await Datacontext.Categories.Include(x => x.BookCategories).ThenInclude(x => x.Book).ToListAsync();
+            return await this.datacontext.Categories.Include(x => x.BookCategories).ThenInclude(x => x.Book).ToListAsync();
         }
     }
 }

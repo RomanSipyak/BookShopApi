@@ -12,7 +12,7 @@ namespace Tweetbook.Contracts
         public const string Version = "v1";
 
         private const string Base = Root + "/" + Version;
-   
+
         public static class Categories
         {
             public const string Create = Base + "/Categories";
@@ -80,8 +80,6 @@ namespace Tweetbook.Contracts
             public const string UpdateUser = Base + "/Identity/UpdateUser";
 
             public const string DeleteUserByEmail = Base + "/Identity/Users/Delete/{userEmail}";
-
-
         }
     }
 }
